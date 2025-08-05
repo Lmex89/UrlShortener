@@ -1,16 +1,18 @@
 # model/domain/base_model.py
-from dataclasses import dataclass
 from datetime import date, datetime
 from typing import Optional
 
-@dataclass
+
 class UrlModel:
-    id:Optional[int] = None
-    short_code:str
-    original_url:str
-    created_at:datetime
-    expires_at:datetime
-    visits:int
+    def __init__(
+        self, original_url: str, expires_at: datetime, short_code:str,  visits: Optional[int] = 0
+    ):
+        self.id: int
+        self.short_code: str = short_code
+        self.original_url: str = original_url
+        self.created_at: datetime = datetime.now()
+        self.expires_at: datetime = expires_at
+        self.visits: int = visits
 
     def dump(self):
         return self.__dict__
