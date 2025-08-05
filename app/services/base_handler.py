@@ -5,7 +5,7 @@ from datetime import datetime, timedelta
 from db.url_uow import UrlShortenerUnitofWork
 from model.serializers import URLCreate, ShortURLResponse, URL
 from loguru import logger
-from starlette.status import  HTTP_400_BAD_REQUEST
+from starlette.status import HTTP_400_BAD_REQUEST
 
 
 def create_unique_short_code() -> str:
@@ -53,22 +53,26 @@ def get_original_url_by_short_code(short_code: str) -> URL | None:
     """Retrieves the URL entry based on the short code."""
 
     with UrlShortenerUnitofWork() as uow:
-
         db_url = uow.url_shotner_repository.get_by_short_code(short_code=short_code)
-
+        logger.debug(f"Getting url from {db_url}")
 
         if not db_url:
             # 2. Raise a 404 error if the short code is not found
-            raise HTTPException(status_code=HTTP_400_BAD_REQUEST, detail="Short URL not found")
+            raise HTTPException(
+                status_code=HTTP_400_BAD_REQUEST, detail="Short URL not found"
+            )
 
         # 3. Check if the URL has expired
         if db_url.expires_at and db_url.expires_at < datetime.now():
-            raise HTTPException(status_code=HTTP_400_BAD_REQUEST, detail="Short URL has expired")
+            raise HTTPException(
+                status_code=HTTP_400_BAD_REQUEST, detail="Short URL has expired"
+            )
 
         db_url.visits += 1
+        logger.debug(f"Adding vists +1 url from {db_url}")
         uow.url_shotner_repository.add(db_url)
         uow.commit()
 
-        return URL.model_construct(**db_url.dump())
-
-
+        response = URL.model_construct(**db_url.dump())
+        logger.debug(f"response URL  from {response}")
+        return response
