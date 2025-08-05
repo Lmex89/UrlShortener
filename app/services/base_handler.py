@@ -69,6 +69,6 @@ def get_original_url_by_short_code(short_code: str) -> URL | None:
         uow.url_shotner_repository.add(db_url)
         uow.commit()
 
-        return URL(db_url)
+        return URL.model_construct(**db_url.dump())
 
 
