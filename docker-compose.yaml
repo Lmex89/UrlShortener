@@ -1,0 +1,9 @@
+
+services:
+  api:
+    build: .
+    ports:
+      - "9000:9000"
+    volumes:
+      - .:/app
+      - ./database.db:/app/database.db
