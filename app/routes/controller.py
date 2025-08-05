@@ -1,19 +1,15 @@
-
-from fastapi import APIRouter, Body, Depends, HTTPException, Request
-from fastapi.exceptions import RequestValidationError
+from fastapi import APIRouter
+from fastapi.responses import RedirectResponse
 from loguru import logger
-from pydantic import errors
-from pydantic.error_wrappers import ValidationError
-from starlette.status import HTTP_201_CREATED, HTTP_400_BAD_REQUEST
 
 from common.api.responses import responses as HTTP_RESPONSES
-from model.errors import EntityNotFoundException, NotFoundMessage
+from starlette.status import HTTP_301_MOVED_PERMANENTLY
 
 ################################################################################
 ### En app/model/rest.py se definen los modelos que servirán para comunicarse
 ### con el front end (tanto los que se reciben como los que se devuelven)
 ################################################################################
-from model.serializers import ShortURLResponse, URLCreate
+from model.serializers import ShortURLResponse, URLBase, URLCreate
 from services import base_handler as handler
 
 ################################################################################
@@ -31,3 +27,12 @@ router = APIRouter(responses=HTTP_RESPONSES)
 # Solo usar async def si se requiere hacer await
 def shortener(url: URLCreate) -> ShortURLResponse:
     return handler.create_short_url(url=url)
+
+
+@router.get("/{short_code}", response_model=URLBase)
+# Solo usar async def si se requiere hacer await
+def get_redirect_short_code(short_code: str) -> URLBase:
+    return RedirectResponse(
+        url=handler.get_original_url_by_short_code(short_code=short_code).original_url,
+        status_code=HTTP_301_MOVED_PERMANENTLY,
+    )

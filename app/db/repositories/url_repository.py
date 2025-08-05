@@ -1,5 +1,5 @@
 from operator import imod
-from typing import Any
+from typing import Any, Optional
 from sqlalchemy.sql.expression import false, true
 from sqlalchemy.sql import select, and_
 
@@ -15,7 +15,7 @@ class UrlRepository(BaseRepository):
     def get(self, id: int) -> Any:
         return self.session.query(UrlModel).filter_by(id=id).first()
 
-    def get_by_short_code(self, short_code:str):
+    def get_by_short_code(self, short_code:str)-> Optional[UrlModel]:
         return self.session.query(UrlModel).filter(UrlModel.short_code==short_code).first()
 
     def add(self, base_model):

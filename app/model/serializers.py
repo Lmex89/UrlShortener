@@ -17,7 +17,8 @@ class URL(URLBase):
 
     class Config:
         # This is required to make Pydantic models compatible with SQLAlchemy ORM
-        orm_mode = True
+        from_attributes = True
+
 
 
 class ShortURLResponse(BaseModel):
