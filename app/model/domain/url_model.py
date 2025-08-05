@@ -5,7 +5,7 @@ from typing import Optional
 
 @dataclass
 class UrlModel:
-    id:Optional[int]
+    id:Optional[int] = None
     short_code:str
     original_url:str
     created_at:datetime
