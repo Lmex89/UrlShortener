@@ -36,6 +36,7 @@ def create_short_url(url: URLCreate) -> ShortURLResponse:
             short_code=short_code,
             original_url=str(url.original_url),
             expires_at=expires_at,
+            created_at=datetime.now(),
             visits=0
         )
         logger.debug("Creating data in Db {db_url}")

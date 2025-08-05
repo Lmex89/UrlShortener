@@ -1,10 +1,11 @@
 # model/domain/base_model.py
 from dataclasses import dataclass
 from datetime import date, datetime
+from typing import Optional
 
 @dataclass
 class UrlModel:
-    id:int
+    id:Optional[int]
     short_code:str
     original_url:str
     created_at:datetime
