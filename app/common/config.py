@@ -19,7 +19,7 @@ JWT_TOKEN_PREFIX = "Token"
 ### ejecute la aplicación (no usar archivo .env)
 ################################################################################
 
-DEBUG: bool = os.getenv("LOGGING_LEVEL") == "DEBUG"
+DEBUG: bool = True
 
 HOST:str = os.getenv("DB_HOST")
 PORT:int = os.getenv("DB_PORT")
