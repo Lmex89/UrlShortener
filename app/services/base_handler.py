@@ -2,7 +2,7 @@ from model.domain.url_model import UrlModel
 import secrets
 from datetime import datetime, timedelta
 from db.url_uow import UrlShortenerUnitofWork
-from model.serializers import URLCreate,  URL
+from model.serializers import URLCreate,  ShortURLResponse
 
 def create_unique_short_code() -> str:
     """Generates a unique 7-character short code."""
@@ -19,7 +19,7 @@ def create_unique_short_code() -> str:
             if not uow.url_shotner_repository.get_by_short_code(short_code=short_code):
                 return short_code
 
-def create_short_url(url: URLCreate) -> URL:
+def create_short_url(url: URLCreate) -> ShortURLResponse:
     """Creates a new entry in the database for the shortened URL."""
     short_code = create_unique_short_code()
     
@@ -36,7 +36,7 @@ def create_short_url(url: URLCreate) -> URL:
         )
         uow.url_shotner_repository.add(db_url)
         uow.commit()
-        return URL(**db_url.dump())
+        return ShortURLResponse(**db_url.dump())
 
 # def get_original_url_by_short_code(db: Session, short_code: str) -> models.URL | None:
 #     """Retrieves the URL entry based on the short code."""
