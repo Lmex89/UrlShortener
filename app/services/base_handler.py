@@ -3,6 +3,7 @@ import secrets
 from datetime import datetime, timedelta
 from db.url_uow import UrlShortenerUnitofWork
 from model.serializers import URLCreate,  ShortURLResponse
+from loguru import logger
 
 def create_unique_short_code() -> str:
     """Generates a unique 7-character short code."""
@@ -21,10 +22,12 @@ def create_unique_short_code() -> str:
 
 def create_short_url(url: URLCreate) -> ShortURLResponse:
     """Creates a new entry in the database for the shortened URL."""
+    logger.debug(f"Getting url from {url}")
     short_code = create_unique_short_code()
-    
+    logger.debug(f"creating urlshort from {short_code}")
     # Set expiration time to 30 days from now
     expires_at = datetime.utcnow() + timedelta(days=30)
+    logger.debug(f"expires at expires_at from {expires_at}")
     
     with UrlShortenerUnitofWork() as uow:
 
@@ -34,9 +37,12 @@ def create_short_url(url: URLCreate) -> ShortURLResponse:
             expires_at=expires_at,
             visits=0
         )
+        logger.debug("Creating data in Db {db_url}")
         uow.url_shotner_repository.add(db_url)
         uow.commit()
-        return ShortURLResponse(**db_url.dump())
+        repsonse = ShortURLResponse(**db_url.dump())
+        logger.debug("Creating response serialized {repsonse}")
+        return repsonse
 
 # def get_original_url_by_short_code(db: Session, short_code: str) -> models.URL | None:
 #     """Retrieves the URL entry based on the short code."""
