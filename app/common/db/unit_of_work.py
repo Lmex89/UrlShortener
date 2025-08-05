@@ -14,7 +14,7 @@ SQLALCHEMY_DATABASE_URL = "sqlite:///./my_database.db"
 
 # SQLite only supports DEFERRED, IMMEDIATE, or EXCLUSIVE isolation levels.
 # REPEATABLE READ is for PostgreSQL/MySQL and will raise an error.
-_isolation_level = "DEFERRED"
+_isolation_level = "SERIALIZABLE" 
 
 # Use a null pool for SQLite, as it is a file-based database and doesn't
 # require a connection pool for network connections.
