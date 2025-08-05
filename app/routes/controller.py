@@ -23,7 +23,7 @@ router = APIRouter(responses=HTTP_RESPONSES)
 ### Se definen los parámetros que se reciben y los que se devuelven con base
 ### en el modelo
 ################################################################################
-@router.post("/shorten", response_model=ShortURLResponse)
+@router.post("/", response_model=ShortURLResponse)
 # Solo usar async def si se requiere hacer await
 def shortener(url: URLCreate) -> ShortURLResponse:
     return handler.create_short_url(url=url)
