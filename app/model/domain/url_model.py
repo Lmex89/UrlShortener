@@ -10,3 +10,6 @@ class UrlModel:
     created_at:datetime
     expires_at:datetime
     visits:int
+
+    def dump(self):
+        return self.__dict__

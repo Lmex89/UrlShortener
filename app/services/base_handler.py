@@ -36,7 +36,7 @@ def create_short_url(url: URLCreate) -> URL:
         )
         uow.url_shotner_repository.add(db_url)
         uow.commit()
-        return db_url
+        return URL(**db_url.dump())
 
 # def get_original_url_by_short_code(db: Session, short_code: str) -> models.URL | None:
 #     """Retrieves the URL entry based on the short code."""
