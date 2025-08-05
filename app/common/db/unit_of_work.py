@@ -25,7 +25,7 @@ DEFAULT_SESSION_FACTORY = sessionmaker(
         isolation_level=_isolation_level,
         poolclass=NullPool,  # Use NullPool, as it's a file-based DB
         # This is the most critical setting for SQLite with web frameworks.
-        connect_args={"check_same_thread": False, "connect_timeout": 8},
+        connect_args={"check_same_thread": False}
     )
 )
 
