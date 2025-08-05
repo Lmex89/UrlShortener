@@ -10,7 +10,7 @@ from starlette.datastructures import CommaSeparatedStrings, Secret
 
 from common.logging import InterceptHandler
 
-API_PREFIX = "api/v1"
+API_PREFIX = "/api/v1"
 
 JWT_TOKEN_PREFIX = "Token"
 
