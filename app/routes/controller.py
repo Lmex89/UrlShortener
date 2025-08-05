@@ -29,7 +29,7 @@ def shortener(url: URLCreate) -> ShortURLResponse:
     return handler.create_short_url(url=url)
 
 
-@router.get("{short_code}", response_model=URLBase)
+@router.get("/{short_code}", response_model=URLBase)
 # Solo usar async def si se requiere hacer await
 def get_redirect_short_code(short_code: str) -> URLBase:
     return RedirectResponse(
