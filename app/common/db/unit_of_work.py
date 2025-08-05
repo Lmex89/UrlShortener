@@ -13,7 +13,7 @@ current_directory = os.getcwd()
 logger.debug(f"curent_dir ===={current_directory}")
 # For a production application, load this URL from an environment variable or config file.
 # For example: from common.config import SQLALCHEMY_DATABASE_URL
-SQLALCHEMY_DATABASE_URL = f"sqlite:///{current_directory}./database.db"
+SQLALCHEMY_DATABASE_URL = "sqlite:///./database.db"
 
 # SQLite only supports DEFERRED, IMMEDIATE, or EXCLUSIVE isolation levels.
 # REPEATABLE READ is for PostgreSQL/MySQL and will raise an error.
