@@ -38,11 +38,11 @@ def create_short_url(url: URLCreate) -> ShortURLResponse:
             expires_at=expires_at,
             visits=0
         )
-        logger.debug("Creating data in Db {db_url}")
+        logger.debug(f"Creating data in Db {db_url}")
+        repsonse = ShortURLResponse(**db_url.dump())
         uow.url_shotner_repository.add(db_url)
         uow.commit()
-        repsonse = ShortURLResponse(**db_url.dump())
-        logger.debug("Creating response serialized {repsonse}")
+        logger.debug(f"Creating response serialized {repsonse}")
         return repsonse
 
 # def get_original_url_by_short_code(db: Session, short_code: str) -> models.URL | None:
