@@ -16,6 +16,7 @@ def create_unique_short_code() -> str:
     with UrlShortenerUnitofWork() as uow:
         while True:
             short_code = ''.join(secrets.choice(charset) for _ in range(length))
+            logger.debug(f"creating shor_code for {short_code}")
             # Check if the generated short code already exists in the database
             if not uow.url_shotner_repository.get_by_short_code(short_code=short_code):
                 return short_code
