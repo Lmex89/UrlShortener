@@ -41,6 +41,7 @@ def create_short_url(url: URLCreate) -> ShortURLResponse:
         logger.debug(f"Creating data in Db {db_url}")
         repsonse = ShortURLResponse(short_url=short_code)
         uow.url_shotner_repository.add(db_url)
+        logger.debug(f"Record inserted with ID: {db_url.id}")
         uow.commit()
         logger.debug(f"Creating response serialized {repsonse}")
         return repsonse

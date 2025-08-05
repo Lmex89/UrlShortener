@@ -16,3 +16,6 @@ class UrlModel:
 
     def dump(self):
         return self.__dict__
+
+    def __str__(self):
+        return f"id={self.id}, short_code={self.short_code} original_url={self.original_url}"

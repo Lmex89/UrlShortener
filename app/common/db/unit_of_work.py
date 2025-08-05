@@ -10,11 +10,11 @@ from sqlalchemy.pool import NullPool
 
 # For a production application, load this URL from an environment variable or config file.
 # For example: from common.config import SQLALCHEMY_DATABASE_URL
-SQLALCHEMY_DATABASE_URL = "sqlite:///./database.db"
+SQLALCHEMY_DATABASE_URL = "sqlite:///./.db"
 
 # SQLite only supports DEFERRED, IMMEDIATE, or EXCLUSIVE isolation levels.
 # REPEATABLE READ is for PostgreSQL/MySQL and will raise an error.
-_isolation_level = "SERIALIZABLE" 
+_isolation_level = "SERIALIZABLE"
 
 # Use a null pool for SQLite, as it is a file-based database and doesn't
 # require a connection pool for network connections.
@@ -25,7 +25,7 @@ DEFAULT_SESSION_FACTORY = sessionmaker(
         isolation_level=_isolation_level,
         poolclass=NullPool,  # Use NullPool, as it's a file-based DB
         # This is the most critical setting for SQLite with web frameworks.
-        connect_args={"check_same_thread": False}
+        connect_args={"check_same_thread": False},
     )
 )
 
