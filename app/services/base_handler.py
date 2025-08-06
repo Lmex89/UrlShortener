@@ -7,6 +7,8 @@ from model.serializers import URLCreate, ShortURLResponse, URL
 from loguru import logger
 from starlette.status import HTTP_400_BAD_REQUEST
 
+from services.constants import API_VERSION_PREFIX, HOST_URL
+
 
 def create_unique_short_code() -> str:
     """Generates a unique 7-character short code."""
@@ -22,6 +24,10 @@ def create_unique_short_code() -> str:
             # Check if the generated short code already exists in the database
             if not uow.url_shotner_repository.get_by_short_code(short_code=short_code):
                 return short_code
+
+
+def get_short_code(code: str) -> str:
+    return HOST_URL + API_VERSION_PREFIX + code
 
 
 def create_short_url(url: URLCreate) -> ShortURLResponse:
@@ -41,7 +47,7 @@ def create_short_url(url: URLCreate) -> ShortURLResponse:
             visits=0,
         )
         logger.debug(f"Creating data in Db {db_url}")
-        repsonse = ShortURLResponse(short_url=short_code)
+        repsonse = ShortURLResponse(short_url=get_short_code(code=short_code))
         uow.url_shotner_repository.add(db_url)
         logger.debug(f"Record inserted with ID: {db_url.id}")
         uow.commit()
