@@ -7,3 +7,6 @@ services:
     volumes:
       - .:/app
       - ./database.db:/app/database.db
+    environment:
+      - API_VERSION_PREFIX=api/v1/
+      - HOST_URL=http://192.168.68.53:9000/

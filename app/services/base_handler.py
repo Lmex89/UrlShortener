@@ -27,7 +27,7 @@ def create_unique_short_code() -> str:
 
 
 def get_short_code(code: str) -> str:
-    return HOST_URL + API_VERSION_PREFIX + code
+    return HOST_URL + API_VERSION_PREFIX + "shortener" +code
 
 
 def create_short_url(url: URLCreate) -> ShortURLResponse:
