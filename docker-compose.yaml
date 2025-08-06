@@ -8,4 +8,4 @@ services:
       - .:/app
       - ./database.db:/app/database.db
     environment:
-      - HOST_URL=http://192.168.68.53:9000/url/
+      - HOST_URL=http://192.168.68.53:9000/

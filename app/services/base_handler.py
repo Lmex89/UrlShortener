@@ -7,7 +7,7 @@ from model.serializers import URLCreate, ShortURLResponse, URL
 from loguru import logger
 from starlette.status import HTTP_400_BAD_REQUEST
 
-from services.constants import API_VERSION_PREFIX, HOST_URL
+from services.constants import HOST_URL
 
 
 def create_unique_short_code() -> str:
@@ -27,7 +27,7 @@ def create_unique_short_code() -> str:
 
 
 def get_short_code(code: str) -> str:
-    return HOST_URL + API_VERSION_PREFIX + "shortener" +code
+    return HOST_URL + code
 
 
 def create_short_url(url: URLCreate) -> ShortURLResponse:
