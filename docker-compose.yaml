@@ -4,8 +4,8 @@ services:
     build: .
     ports:
       - "9000:9000"
+    environment:
+      - HOST_URL=${API_HOST}
     volumes:
       - .:/app
-      - ./database.db:/app/database.db
-    environment:
-      - HOST_URL=https://ly.urlnet.site/
+      - ${SERVER_DATABASE_PATH}:/app/database.db
