@@ -22,6 +22,7 @@ jobs:
 
       - name: 2. Deploy with Docker Compose
         run: |
+          echo "🚀 Deploying FastAPI service..."
           cd $GITHUB_WORKSPACE
           echo "🚀 Deploying FastAPI service..."
 
