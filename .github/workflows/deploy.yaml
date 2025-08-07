@@ -14,7 +14,7 @@ jobs:
     # This 'env' block securely loads your secrets into the runner's shell environment
     env:
       API_HOST: ${{ secrets.API_HOST }}
-      DB_HOST_PATH: ${{ secrets.DB_HOST_PATH }}
+      SERVER_DATABASE_PATH: ${{ secrets.SERVER_DATABASE_PATH }}
 
     steps:
       - name: 1. Checkout main branch
