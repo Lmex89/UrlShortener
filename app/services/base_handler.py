@@ -36,7 +36,7 @@ def create_short_url(url: URLCreate) -> ShortURLResponse:
     short_code = create_unique_short_code()
     logger.debug(f"creating urlshort from {short_code}")
     # Set expiration time to 30 days from now
-    expires_at = datetime.utcnow() + timedelta(days=30)
+    expires_at = datetime.now() + timedelta(days=30)
     logger.debug(f"expires at expires_at from {expires_at}")
 
     with UrlShortenerUnitofWork() as uow:
@@ -64,12 +64,14 @@ def get_original_url_by_short_code(short_code: str) -> URL | None:
 
         if not db_url:
             # 2. Raise a 404 error if the short code is not found
+            logger.warning(f"No se encontro url related to {short_code}")
             raise HTTPException(
                 status_code=HTTP_400_BAD_REQUEST, detail="Short URL not found"
             )
 
         # 3. Check if the URL has expired
         if db_url.expires_at and db_url.expires_at < datetime.now():
+            logger.error(f"Short URL has expired {short_code}")
             raise HTTPException(
                 status_code=HTTP_400_BAD_REQUEST, detail="Short URL has expired"
             )
