@@ -25,7 +25,7 @@ class APIKeyChecker:
         """
         if not self.api_key:
             raise HTTPException(
-                status_code=status.HTTP_500_INTERNAL_SERVER_ERROR,
+                status_code=status.HTTP_401_UNAUTHORIZED,
                 detail=f"Server configuration error: {self.env_var} not set.",
             )
 
@@ -33,6 +33,6 @@ class APIKeyChecker:
             return True
         else:
             raise HTTPException(
-                status_code=status.HTTP_401_UNAUTHORIZED,
+                status_code=status.HTTP_403_FORBIDDEN,
                 detail="Invalid or missing API Key for this endpoint",
             )
