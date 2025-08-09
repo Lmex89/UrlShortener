@@ -21,5 +21,8 @@ class URL(URLBase):
 
 
 
+class URLDelete(BaseModel):
+    pass
+
 class ShortURLResponse(BaseModel):
     short_url: str

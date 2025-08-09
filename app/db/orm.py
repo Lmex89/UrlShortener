@@ -21,6 +21,7 @@ urls_table = Table(
     Column("created_at", DateTime, nullable=False, server_default=func.now()),
     Column("expires_at", DateTime, nullable=True),
     Column("visits", Integer, nullable=False, server_default="0"),
+    Column("active", Integer, nullable=False, server_default="1"),
 )
 
 
@@ -39,5 +40,6 @@ def start_mappers():
             "created_at": urls_table.c.created_at,
             "expires_at": urls_table.c.expires_at,
             "visits": urls_table.c.visits,
+            "active": urls_table.c.active
         },
     )

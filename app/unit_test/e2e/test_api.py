@@ -4,12 +4,11 @@ import unittest
 
 from main import app
 from common.config import API_PREFIX
-from services import base_handler
+from services import short_code_handler
 
 from unit_test.e2e import api_client
 from unit_test.random_stuff import random_string, random_number
 
-from test import ssl_servers
 
 id_generado = random_number()
 BASE = '/base'
@@ -42,7 +41,7 @@ with TestClient(app) as client:
             self.assertEqual(response.status_code, 200)
             self.assertEqual(response.json(), expected_response)
 
-        @patch.object(base_handler, 'agregar_registro', return_value=id_generado)
+        @patch.object(short_code_handler, 'agregar_registro', return_value=id_generado)
         def test_post_add(self, mock_agregar_registro):
             payload = api_client.get_post_add_payload(
                 random_string('name '),
@@ -60,7 +59,7 @@ with TestClient(app) as client:
             self.assertEqual(response.status_code, 200)
             self.assertEqual(response.json(), expected_response)
 
-        @patch.object(base_handler,'obtener_registro',
+        @patch.object(short_code_handler,'obtener_registro',
             return_value=MockBaseModel(
                 id_generado,
                 'this is a message'

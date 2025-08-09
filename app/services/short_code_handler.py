@@ -1,29 +1,34 @@
-from fastapi import HTTPException
-from model.domain.url_model import UrlModel
-import secrets
 from datetime import datetime, timedelta
-from db.url_uow import UrlShortenerUnitofWork
-from model.serializers import URLCreate, ShortURLResponse, URL
-from loguru import logger
-from starlette.status import HTTP_400_BAD_REQUEST
 
+from fastapi import HTTPException
+from loguru import logger
+from starlette.status import HTTP_404_NOT_FOUND, HTTP_400_BAD_REQUEST
+
+from db.url_uow import UrlShortenerUnitofWork
+from model.domain.url_model import UrlModel
+from model.serializers import URL, ShortURLResponse, URLCreate
+from services.classes.short_code.expiration_service import ExpirationService
+from services.classes.short_code.short_code_generator import ShortCodeGenerator
+from services.classes.short_code.unique_generator import DatabaseUniquenessChecker
 from services.constants import HOST_URL
 
 
-def create_unique_short_code() -> str:
-    """Generates a unique 7-character short code."""
-    # A short code of 7 characters gives over 3.5 trillion unique combinations
-    # using a base62 character set (a-z, A-Z, 0-9).
-    length = 7
-    charset = "abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789"
+def expiration_checker() -> bool:
+    # 1. Create an expiration service instance.
+    expiration_checker = ExpirationService()
+    return expiration_checker.is_expired()
 
-    with UrlShortenerUnitofWork() as uow:
-        while True:
-            short_code = "".join(secrets.choice(charset) for _ in range(length))
-            logger.debug(f"creating shor_code for {short_code}")
-            # Check if the generated short code already exists in the database
-            if not uow.url_shotner_repository.get_by_short_code(short_code=short_code):
-                return short_code
+
+def generate_unique_short_code(
+    generator: ShortCodeGenerator, checker: DatabaseUniquenessChecker
+) -> str:
+    """
+    Generates a unique short code by orchestrating a generator and a uniqueness checker.
+    """
+    while True:
+        short_code = generator.generate()
+        if checker.is_unique(short_code):
+            return short_code
 
 
 def get_short_code(code: str) -> str:
@@ -33,19 +38,25 @@ def get_short_code(code: str) -> str:
 def create_short_url(url: URLCreate) -> ShortURLResponse:
     """Creates a new entry in the database for the shortened URL."""
     logger.debug(f"Getting url from {url}")
-    short_code = create_unique_short_code()
-    logger.debug(f"creating urlshort from {short_code}")
+
     # Set expiration time to 30 days from now
     expires_at = datetime.now() + timedelta(days=30)
     logger.debug(f"expires at expires_at from {expires_at}")
-
+    code_generator = ShortCodeGenerator(length=7)
     with UrlShortenerUnitofWork() as uow:
+        uniqueness_checker = DatabaseUniquenessChecker(uow=uow)
+        short_code = generate_unique_short_code(
+            generator=code_generator, checker=uniqueness_checker
+        )
+        logger.debug(f"creating urlshort from {short_code}")
+
         db_url = UrlModel(
             short_code=short_code,
             original_url=str(url.original_url),
             expires_at=expires_at,
             visits=0,
         )
+        db_url.set_experition_at(days=30)
         logger.debug(f"Creating data in Db {db_url}")
         repsonse = ShortURLResponse(short_url=get_short_code(code=short_code))
         uow.url_shotner_repository.add(db_url)
@@ -66,7 +77,7 @@ def get_original_url_by_short_code(short_code: str) -> URL | None:
             # 2. Raise a 404 error if the short code is not found
             logger.warning(f"No se encontro url related to {short_code}")
             raise HTTPException(
-                status_code=HTTP_400_BAD_REQUEST, detail="Short URL not found"
+                status_code=HTTP_404_NOT_FOUND, detail="Short URL not found"
             )
 
         # 3. Check if the URL has expired
@@ -84,3 +95,18 @@ def get_original_url_by_short_code(short_code: str) -> URL | None:
         response = URL.model_construct(**db_url.dump())
         logger.debug(f"response URL  from {response}")
         return response
+
+
+def delete_expired_ulrs():
+
+    with UrlShortenerUnitofWork() as uow:
+        urls_db = uow.url_shotner_repository.get_all_url_expired()
+
+        logger.debug(f"getting urls for delete {urls_db}")
+        for url in urls_db:
+            url.set_active_(active=False)
+            logger.debug(f"setting url for delete {url}")
+            uow.url_shotner_repository.add(url)
+
+        uow.commit()
+
