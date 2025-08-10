@@ -27,7 +27,7 @@ class UrlRepository(BaseRepository):
         return (
             self.session.query(UrlModel)
             .filter(UrlModel.active == 1, UrlModel.expires_at > datetime.now())
-            .first()
+            .all()
         )
 
 
