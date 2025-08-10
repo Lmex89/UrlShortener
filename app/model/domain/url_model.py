@@ -23,7 +23,7 @@ class UrlModel:
         return self.__dict__
 
     def __str__(self):
-        return f"id={self.id}, short_code={self.short_code} original_url={self.original_url}"
+        return f"id={self.id}, short_code={self.short_code} original_url={self.original_url} active : {self.active}"
 
     def set_experition_at(self, days: int = 30) -> None:
         self.expires_at = datetime.now() + timedelta(days=days)

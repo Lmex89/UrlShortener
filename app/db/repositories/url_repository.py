@@ -26,7 +26,7 @@ class UrlRepository(BaseRepository):
     def get_all_url_expired(self) -> List[UrlModel]:
         return (
             self.session.query(UrlModel)
-            .filter(UrlModel.active == 1, UrlModel.expires_at > datetime.now())
+            .filter(UrlModel.active == 1, UrlModel.expires_at < datetime.now())
             .all()
         )
 
