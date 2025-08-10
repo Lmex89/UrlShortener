@@ -15,8 +15,8 @@ jobs:
     env:
       API_HOST: ${{ secrets.API_HOST }}
       SERVER_DATABASE_PATH: ${{ secrets.SERVER_DATABASE_PATH }}
-      CREATE_API_KEY : ${{CREATE_API_KEY}}
-      DELETE_API_KEY : ${{DELETE_API_KEY}}
+      CREATE_API_KEY : ${{secrets.CREATE_API_KEY}}
+      DELETE_API_KEY : ${{secrets.DELETE_API_KEY}}
 
     steps:
       - name: 1. Checkout main branch
