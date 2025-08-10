@@ -22,7 +22,7 @@ class URL(URLBase):
 
 
 class URLDelete(BaseModel):
-    pass
+    count_items_deleted : int
 
 class ShortURLResponse(BaseModel):
     short_url: str

@@ -6,7 +6,7 @@ from starlette.status import HTTP_404_NOT_FOUND, HTTP_400_BAD_REQUEST
 
 from db.url_uow import UrlShortenerUnitofWork
 from model.domain.url_model import UrlModel
-from model.serializers import URL, ShortURLResponse, URLCreate
+from model.serializers import URL, ShortURLResponse, URLCreate, URLDelete
 from services.classes.short_code.expiration_service import ExpirationService
 from services.classes.short_code.short_code_generator import ShortCodeGenerator
 from services.classes.short_code.unique_generator import DatabaseUniquenessChecker
@@ -98,10 +98,9 @@ def get_original_url_by_short_code(short_code: str) -> URL | None:
 
 
 def delete_expired_ulrs():
-
     with UrlShortenerUnitofWork() as uow:
         urls_db = uow.url_shotner_repository.get_all_url_expired()
-
+        count = len(urls_db)
         logger.debug(f"getting urls for delete {urls_db}")
         for url in urls_db:
             url.set_active_(active=False)
@@ -109,4 +108,4 @@ def delete_expired_ulrs():
             uow.url_shotner_repository.add(url)
 
         uow.commit()
-
+        return URLDelete(count_items_deleted=count)
