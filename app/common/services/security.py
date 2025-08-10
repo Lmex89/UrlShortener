@@ -1,7 +1,7 @@
 import os
 from fastapi import Security, HTTPException, status
 from fastapi.security import APIKeyHeader
-
+from loguru import logger 
 API_KEY_HEADER = APIKeyHeader(name="x-api-key", auto_error=False)
 
 
@@ -24,6 +24,8 @@ class APIKeyChecker:
         allowing FastAPI to use them as dependencies.
         """
         if not self.api_key:
+
+            logger.warning(f" No apikey was set {self.api_key}")
             raise HTTPException(
                 status_code=status.HTTP_401_UNAUTHORIZED,
                 detail=f"Server configuration error: {self.env_var} not set.",
