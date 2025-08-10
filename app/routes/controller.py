@@ -12,6 +12,11 @@ from common.api.responses import responses as HTTP_RESPONSES
 from common.services.security import APIKeyChecker
 from model.serializers import ShortURLResponse, URLBase, URLCreate, URLDelete
 from services import short_code_handler as handler
+import os 
+
+logger.info(f" =========== {os.getenv("CREATE_API_KEY")}")
+
+
 
 ################################################################################
 ### Se pueden definir errores personalizados (ver la implementación en el
@@ -20,6 +25,7 @@ from services import short_code_handler as handler
 router = APIRouter(responses=HTTP_RESPONSES)
 require_create_key = APIKeyChecker(env_var="CREATE_API_KEY")
 requere_delete_key = APIKeyChecker(env_var="DELETE_API_KEY")
+
 
 ################################################################################
 ### Se definen los parámetros que se reciben y los que se devuelven con base
