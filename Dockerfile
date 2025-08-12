@@ -3,7 +3,7 @@
 # This stage installs Python dependencies into a dedicated directory.
 # Using a separate stage keeps the final image smaller and more secure.
 # --------------------------------------------------------------------------------------
-FROM python:3.12-slim as builder
+FROM python:3.12 as builder
 
 # Set environment variables to prevent Python from writing .pyc files
 # and to ensure output is sent straight to the terminal without buffering.
