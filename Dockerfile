@@ -12,6 +12,8 @@ ENV PYTHONUNBUFFERED 1
 
 # Create a non-root user and group for security.
 # Running as a non-root user is a critical security best practice.
+RUN  pip install --upgrade pip
+
 RUN addgroup --system appgroup && adduser --system --ingroup appgroup appuser
 
 # Set the working directory
