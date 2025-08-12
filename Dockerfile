@@ -1,4 +1,4 @@
-FROM python:3.11 AS python-build
+FROM python:3.12 AS python-build
 
 RUN pip install --upgrade pip
 
@@ -8,7 +8,7 @@ USER admin
 COPY --chown=admin:admin ./app /home/admin/app
 RUN pip install -r /home/admin/app/requirements.pip
 
-FROM python:3.11-slim-bookworm
+FROM python:3.12-slim-bookworm
 RUN pip install --upgrade pip setuptools
 RUN addgroup admin && adduser admin --ingroup admin
 RUN chown -R admin:admin /home/admin/
