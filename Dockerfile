@@ -33,4 +33,4 @@ WORKDIR /home/admin/app
 
 USER admin
 
-CMD ["uvicorn", "main:app", "--host", "0.0.0.0", "--port", "8080", "--limit-concurrency", "300", "--timeout-keep-alive", "35", "--header", "Strict-Transport-Security:max-age=31536000;includeSubDomains", "--no-server-header"]
+CMD ["uvicorn", "main:app", "--host", "0.0.0.0", "--port", "9000", "--limit-concurrency", "300", "--timeout-keep-alive", "35", "--header", "Strict-Transport-Security:max-age=31536000;includeSubDomains", "--no-server-header"]
