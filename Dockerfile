@@ -19,8 +19,6 @@ RUN apt-get update && \
         locales && \
     rm -r /var/lib/apt/lists/*
 
-COPY intermediate_root-chain.crt /usr/local/share/ca-certificates/
-RUN update-ca-certificates
 
 RUN apt update
 RUN apt-get install -y mariadb-client libmariadb3 mariadb-common
