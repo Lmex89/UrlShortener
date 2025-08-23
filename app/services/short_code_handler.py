@@ -10,7 +10,7 @@ from model.serializers import URL, ShortURLResponse, URLCreate, URLDelete
 from services.classes.short_code.expiration_service import ExpirationService
 from services.classes.short_code.short_code_generator import ShortCodeGenerator
 from services.classes.short_code.unique_generator import DatabaseUniquenessChecker
-from services.constants import HOST_URL
+from services.constants import HOST_URL, TIME_EXPIRATION_URL
 
 
 def expiration_checker() -> bool:
@@ -35,13 +35,14 @@ def get_short_code(code: str) -> str:
     return HOST_URL + code
 
 
-def create_short_url(url: URLCreate) -> ShortURLResponse:
+def create_short_url(
+    url: URLCreate, expiration_time_days: int = TIME_EXPIRATION_URL
+) -> ShortURLResponse:
     """Creates a new entry in the database for the shortened URL."""
     logger.debug(f"Getting url from {url}")
 
     # Set expiration time to 30 days from now
-    expires_at = datetime.now() + timedelta(days=30)
-    logger.debug(f"expires at expires_at from {expires_at}")
+
     code_generator = ShortCodeGenerator(length=7)
     with UrlShortenerUnitofWork() as uow:
         uniqueness_checker = DatabaseUniquenessChecker(uow=uow)
@@ -53,15 +54,16 @@ def create_short_url(url: URLCreate) -> ShortURLResponse:
         db_url = UrlModel(
             short_code=short_code,
             original_url=str(url.original_url),
-            expires_at=expires_at,
+            expires_at=datetime.now(),
             visits=0,
         )
-        db_url.set_experition_at(days=30)
+        db_url.set_experition_at(days=expiration_time_days)
         logger.debug(f"Creating data in Db {db_url}")
+        logger.debug(f"url {short_code} expires at expires_at from {db_url.expires_at}")
         repsonse = ShortURLResponse(short_url=get_short_code(code=short_code))
         uow.url_shotner_repository.add(db_url)
-        logger.debug(f"Record inserted with ID: {db_url.id}")
         uow.commit()
+        logger.debug(f"Record inserted with ID: {db_url.id} sucess")
         logger.debug(f"Creating response serialized {repsonse}")
         return repsonse
 
