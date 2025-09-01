@@ -108,4 +108,5 @@ def delete_expired_ulrs():
             url.set_active_(active=False)
             logger.debug(f"setting url for delete {url}")
         uow.commit()
+        logger.success(f"setting url for delete {count}")
         return URLDelete(count_items_deleted=count)
