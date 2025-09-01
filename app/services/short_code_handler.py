@@ -107,8 +107,5 @@ def delete_expired_ulrs():
         for url in urls_db:
             url.set_active_(active=False)
             logger.debug(f"setting url for delete {url}")
-            uow.url_shotner_repository.add(url)
-            logger.debug(f"setting url for delete {url}")
-
         uow.commit()
         return URLDelete(count_items_deleted=count)

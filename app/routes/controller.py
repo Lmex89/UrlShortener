@@ -15,8 +15,7 @@ from services import short_code_handler as handler
 import os 
 
 logger.info(f" =========== {os.getenv('CREATE_API_KEY')}")
-
-
+logger.info(f" =========== {os.getenv('CREATE_API_KEY')}")
 
 ################################################################################
 ### Se pueden definir errores personalizados (ver la implementación en el
