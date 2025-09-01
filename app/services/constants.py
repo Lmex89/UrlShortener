@@ -6,4 +6,4 @@ CREATE_API_KEY = os.getenv("CREATE_API_KEY")
 logger.info(f"create apikey {CREATE_API_KEY}")
 DELETE_API_KEY = os.getenv("DELETE_API_KEY")
 logger.info(f"delete apikey {DELETE_API_KEY}")
-TIME_EXPIRATION_URL= 7
+TIME_EXPIRATION_URL= 15

@@ -103,7 +103,7 @@ def delete_expired_ulrs():
     with UrlShortenerUnitofWork() as uow:
         urls_db = uow.url_shotner_repository.get_all_url_expired()
         count = len(urls_db)
-        logger.debug(f"getting urls for delete {urls_db}")
+        logger.debug(f"getting urls for delete count {count}")
         for url in urls_db:
             url.set_active_(active=False)
             logger.debug(f"setting url for delete {url}")
