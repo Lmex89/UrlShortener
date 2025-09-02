@@ -40,6 +40,7 @@ def shortener(url: URLCreate,  is_authorized: bool = Security(require_create_key
 @router.get("/{short_code}", response_model=URLBase)
 # Solo usar async def si se requiere hacer await
 def get_redirect_short_code(short_code: str) -> URLBase:
+    logger.debug(f"Processing this code {short_code}")
     return RedirectResponse(
         url=handler.get_original_url_by_short_code(short_code=short_code).original_url,
         status_code=HTTP_301_MOVED_PERMANENTLY,
