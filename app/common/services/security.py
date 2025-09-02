@@ -24,7 +24,6 @@ class APIKeyChecker:
         allowing FastAPI to use them as dependencies.
         """
         if not self.api_key:
-
             logger.warning(f" No apikey was set {self.api_key}")
             raise HTTPException(
                 status_code=status.HTTP_401_UNAUTHORIZED,
@@ -32,6 +31,7 @@ class APIKeyChecker:
             )
 
         if api_key_header == self.api_key:
+            logger.success(f"Apikey is autorized {self}")
             return True
         else:
             raise HTTPException(

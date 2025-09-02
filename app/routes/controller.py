@@ -50,4 +50,6 @@ def get_redirect_short_code(short_code: str) -> URLBase:
 # Solo usar async def si se requiere hacer await
 def delete_old_urls(is_authorized: bool = Security(requere_delete_key)) -> URLDelete:
     logger.debug(f"is Autorized {is_authorized}")
-    return handler.delete_expired_ulrs()
+    response = handler.delete_expired_ulrs()
+    logger.info(f"final debug -------- {response}")
+    return response
